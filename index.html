@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Friends List</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>My Friends</h1>
+    <ul id="friend-list"></ul>
+
+    <form id="friend-form">
+      <input type="text" id="friend-name" placeholder="Add a friend..." required />
+      <button type="submit">Add</button>
+    </form>
+  </main>
+
+  <script>
+    async function loadFriends() {
+      const res = await fetch('/api/friends');
+      const friends = await res.json();
+      const list = document.getElementById('friend-list');
+      list.innerHTML = '';
+      friends.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById('friend-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('friend-name');
+      await fetch('/api/friends', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: input.value }),
+      });
+      input.value = '';
+      loadFriends();
+    });
+
+    loadFriends();
+  </script>
+</body>
+</html>

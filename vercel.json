@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/api/friends", "destination": "/api/friends.js" }
+  ]
+}
